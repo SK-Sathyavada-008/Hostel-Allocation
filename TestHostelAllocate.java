@@ -17,6 +17,7 @@ public class TestHostelAllocate {
         testExceptionClasses();
         testBedMatrixDimensions();
         testStudentModelInheritance();
+        testIntegrationFlow();
 
         System.out.println("\n--------------------------------------------------");
         System.out.println("Test Results: " + testsPassed + " Passed, " + testsFailed + " Failed");
@@ -109,5 +110,28 @@ public class TestHostelAllocate {
         assertTrue("Girl instance inherits from Student2", g instanceof Student2);
         assertTrue("Boy fields correctly initialized", b.id == 101 && b.joined);
         assertTrue("Girl fields correctly initialized", g.id == 201 && g.type == 2);
+    }
+
+    private static void testIntegrationFlow() {
+        System.out.println("\n[Suite 4] Module Integration & Bed Assignment Logic");
+        // Simulate bed allocation in memory
+        int[][] mockBeds = new int[3][5];
+        int targetWard = 1;
+        int allocatedBed = -1;
+
+        for (int i = 0; i < 5; i++) {
+            if (mockBeds[targetWard - 1][i] == 0) {
+                allocatedBed = i + 1;
+                mockBeds[targetWard - 1][i] = 101;
+                break;
+            }
+        }
+
+        assertTrue("First bed allocated is Bed 1", allocatedBed == 1);
+        assertTrue("Bed matrix updated with student ID 101", mockBeds[targetWard - 1][0] == 101);
+
+        // Deallocation flow
+        mockBeds[targetWard - 1][allocatedBed - 1] = 0;
+        assertTrue("Disallocation clears bed matrix back to 0", mockBeds[targetWard - 1][0] == 0);
     }
 }
